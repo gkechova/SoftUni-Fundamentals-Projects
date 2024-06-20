@@ -159,7 +159,7 @@ def update_student(name):
             updated_age, message = validate_student_age(input_age)
 
             if updated_age == INVALID_AGE_VALUE:
-                return INVALID_AGE_VALUE_MESSAGE
+                return message
 
             print("Enter updated grade (leave empty to skip):", end=" ")
             input_grade = input()
