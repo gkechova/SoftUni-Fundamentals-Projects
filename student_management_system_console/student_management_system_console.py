@@ -93,20 +93,20 @@ def format_student_subjects(subjects):
     return listed_subjects
 
 
-def add_student(students_lst, name, age, grade, subjects):
+def add_student(students, name, age, grade, subjects):
     """
     Add a new student record. Each student is a dictionary with keys: name, age, grade, and subjects.
-    :param students_lst: List with all students
+    :param students: List with all students
     :param name: The name of the student.
     :param age: The age of the student.
     :param grade: The grade of the student.
     :param subjects: list (subjects the student is enrolled in)
     :return:
     """
-    for current_student in students_lst:
+    for current_student in students:
 
         if current_student["name"] == name:
-            return students_lst, STUDENT_ALREADY_EXISTS_MESSAGE
+            return students, STUDENT_ALREADY_EXISTS_MESSAGE
 
     else:
         new_student = {
@@ -116,19 +116,19 @@ def add_student(students_lst, name, age, grade, subjects):
             "subjects": subjects
         }
 
-        students_lst.append(new_student)
-        return students_lst, "is added."
+        students.append(new_student)
+        return students, "is added."
 
 
-def update_student(students_lst, name):
+def update_student(students, name):
     """
     Update an existing student record.
     Returns error if student is not found, updated name already exists or updated values are no valid.
-    :param students_lst: List with all students
+    :param students: List with all students
     :param name: The name of the student whose record is to be updated.
     :return: (str) The result of the update
     """
-    for current_student in students_lst:
+    for current_student in students:
 
         if current_student["name"] == name:
             # Student is found. Prompt the user to enter the updated fields and validate each input.
@@ -136,17 +136,17 @@ def update_student(students_lst, name):
             print("Enter updated name (leave empty to skip):", end=" ")
             updated_name_candidate = input()
             updated_name_candidate = validate_student_name(updated_name_candidate, "update")
-            updated_candidate_index = students_lst.index(current_student)
+            updated_candidate_index = students.index(current_student)
 
             if updated_name_candidate:
                 # If the name is to be updated, verify that the new value does not already exists for other student
                 # since our identification is done by name
-                for existing_student in students_lst:
+                for existing_student in students:
 
                     if existing_student["name"] == updated_name_candidate \
-                            and students_lst.index(existing_student) != updated_candidate_index:
+                            and students.index(existing_student) != updated_candidate_index:
 
-                        return students_lst, STUDENT_ALREADY_EXISTS_MESSAGE
+                        return students, STUDENT_ALREADY_EXISTS_MESSAGE
 
                 else:
                     updated_name = updated_name_candidate
@@ -159,14 +159,14 @@ def update_student(students_lst, name):
             updated_age, message = validate_student_age(input_age)
 
             if updated_age == INVALID_AGE_VALUE:
-                return students_lst, message
+                return students, message
 
             print("Enter updated grade (leave empty to skip):", end=" ")
             input_grade = input()
             updated_grade, message = validate_student_grade(input_grade)
 
             if updated_grade == INVALID_GRADE_VALUE:
-                return students_lst, INVALID_GRADE_VALUE_MESSAGE
+                return students, INVALID_GRADE_VALUE_MESSAGE
 
             print("Enter student's subjects (comma-separated or leave empty to skip):", end=" ")
             subjects_input = input()
@@ -184,57 +184,57 @@ def update_student(students_lst, name):
                 del current_student["subjects"]
                 current_student["subjects"] = updated_subjects
 
-            return students_lst, "Student was updated."
+            return students, "Student was updated."
 
     else:
-        return students_lst, STUDENT_NOT_FOUND
+        return students, STUDENT_NOT_FOUND
 
 
-def delete_student(students_lst, name):
+def delete_student(students, name):
     """
     Delete a student record based on the student's name. If student is not found, returns error message.
-    :param students_lst: List with all students
+    :param students: List with all students
     :param name: The name of the student to delete.
     :return: (list)(str) Result of the deletion.
     """
-    for current_student in range(len(students_lst)):
+    for current_student in range(len(students)):
 
-        if name == students_lst[current_student]["name"]:
-            del students_lst[current_student]
-            return students_lst, f"Student {name} is deleted."
+        if name == students[current_student]["name"]:
+            del students[current_student]
+            return students, f"Student {name} is deleted."
 
     else:
-        return students_lst, STUDENT_NOT_FOUND
+        return students, STUDENT_NOT_FOUND
 
 
-def search_student(students_lst, name):
+def search_student(students, name):
     """
     Search for a student by name and return their record.
-    :param students_lst: List with all students
+    :param students: List with all students
     :param name: The name of the student to search for.
     :return: (str) Formatted student information.
     """
 
     student_information = ""
-    for current_student in range(len(students_lst)):
+    for current_student in range(len(students)):
 
-        if name == students_lst[current_student]["name"]:
+        if name == students[current_student]["name"]:
 
-            student_information = f'\nStudent name: {students_lst[current_student]["name"]}'
+            student_information = f'\nStudent name: {students[current_student]["name"]}'
 
-            if students_lst[current_student]["age"]:
-                student_information += f'\nStudent age: {students_lst[current_student]["age"]}'
+            if students[current_student]["age"]:
+                student_information += f'\nStudent age: {students[current_student]["age"]}'
             else:
                 student_information += f'\nStudent age: (undefined)'
 
-            if students_lst[current_student]["grade"]:
-                student_information += f'\nStudent grade: {students_lst[current_student]["grade"]:.2f}'
+            if students[current_student]["grade"]:
+                student_information += f'\nStudent grade: {students[current_student]["grade"]:.2f}'
             else:
                 student_information += f'\nStudent age: (undefined)'
 
             student_information += "\nSubjects: "
 
-            for student_subject in students_lst[current_student]["subjects"]:
+            for student_subject in students[current_student]["subjects"]:
                 student_information += f'\n\tSubject: {student_subject}'
 
             return student_information
@@ -243,33 +243,33 @@ def search_student(students_lst, name):
         return STUDENT_NOT_FOUND
 
 
-def list_all_students(students_lst):
+def list_all_students(students):
     """
     List all student records.
-    :param students_lst: List with all students
+    :param students: List with all students
     :return:
     """
-    students_count = len(students_lst)
+    students_count = len(students)
 
     if students_count > 0:
 
         for current_student in range(students_count):
 
-            student_information = f'\nStudent name: {students_lst[current_student]["name"]}'
+            student_information = f'\nStudent name: {students[current_student]["name"]}'
 
-            if students_lst[current_student]["age"]:
-                student_information += f'\nStudent age: {students_lst[current_student]["age"]}'
+            if students[current_student]["age"]:
+                student_information += f'\nStudent age: {students[current_student]["age"]}'
             else:
                 student_information += f'\nStudent age: (undefined)'
 
-            if students_lst[current_student]["grade"]:
-                student_information += f'\nStudent grade: {students_lst[current_student]["grade"]:.2f}'
+            if students[current_student]["grade"]:
+                student_information += f'\nStudent grade: {students[current_student]["grade"]:.2f}'
             else:
                 student_information += f'\nStudent age: (undefined)'
 
             student_information += "\nSubjects: "
 
-            for student_subject in students_lst[current_student]["subjects"]:
+            for student_subject in students[current_student]["subjects"]:
                 student_information += f'\n\tSubject: {student_subject}'
 
             print(student_information)
