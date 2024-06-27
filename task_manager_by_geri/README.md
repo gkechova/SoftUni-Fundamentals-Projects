@@ -52,4 +52,4 @@ The objective of this project is to develop a suite of Python functions for a ba
 - sort_tasks_by_priority(tasks): Sorts tasks by their priority.
 
 # Instructions
-Download and run in your IDE.
+Download task_manager_by_geri folder and run task_manager.py in your IDE.
